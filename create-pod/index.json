@@ -1,0 +1,22 @@
+{
+    "title": "Kubernetes Creando un pod",
+    "description": "Vamos a crear un pod a ver si anda.",
+    "details": {
+      "intro": {
+        "text": "intro.md"
+      },
+      "steps": [
+        {
+          "title": "Creando un pod",
+          "text": "step1.md",
+          "verify": "verify.sh"
+        }
+      ],
+      "finish": {
+        "text": "finish.md"
+      }
+    },
+    "backend": {
+      "imageid": "kubernetes-kubeadm-1node"
+    }
+  }
