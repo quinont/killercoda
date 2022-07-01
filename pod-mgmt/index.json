@@ -1,0 +1,27 @@
+{
+    "title": "Kubernetes: Administrando pods",
+    "description": "La idea es trabajar con pods en kubernetes.",
+    "details": {
+      "intro": {
+        "text": "intro.md"
+      },
+      "steps": [
+        {
+          "title": "Creando un pod via kubectl",
+          "text": "step1/step1.md",
+          "verify": "step1/verify.sh"
+        },
+        {
+          "title": "Creando un pod con archivos manifests",
+          "text": "step2/step2.md",
+          "verify": "step2/verify.sh"
+        }
+      ],
+      "finish": {
+        "text": "finish.md"
+      }
+    },
+    "backend": {
+      "imageid": "kubernetes-kubeadm-1node"
+    }
+  }
