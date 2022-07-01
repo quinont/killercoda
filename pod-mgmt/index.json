@@ -15,6 +15,16 @@
           "title": "Creando un pod con archivos manifests",
           "text": "step2/step2.md",
           "verify": "step2/verify.sh"
+        },
+        {
+          "title": "Modificando el pod",
+          "text": "step3/step3.md",
+          "verify": "step3/verify.sh"
+        },
+        {
+          "title": "Eliminando los Pods",
+          "text": "step4/step4.md",
+          "verify": "step4/verify.sh"
         }
       ],
       "finish": {
