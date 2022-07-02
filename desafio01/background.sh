@@ -8,10 +8,12 @@ metadata:
 spec:
   selector:
     app: my-app
+  type: NodePort
   ports:
     - protocol: TCP
       port: 80
       targetPort: 8080
+      nodePort: 30000
 EOF
 
 cat > /tmp/deploy.yaml <<EOF

@@ -1,3 +1,3 @@
 #!/bin/bash
 
-kubectl get pod
+curl localhost:30000
