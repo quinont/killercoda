@@ -103,7 +103,7 @@ sleep 5
 
 touch /tmp/finished
 
-for i in $(seq 200); do
-    curl localhost:30000
-    sleep $[ ( $RANDOM % 5 )  + 1 ]s
+for i in $(seq 500); do
+    curl localhost:30000 -H "User-Agent: MyLegacy-App-3.0"
+    sleep $[ ( $RANDOM % 4 )  + 1 ]s
 done
