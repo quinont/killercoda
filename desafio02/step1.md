@@ -1,5 +1,5 @@
 
-# Nuevo deploy da error 503
+# Nuevo deploy da error 502
 
 Hace unos minutos pasamos a la nueva version de nuestro increible backend... De todas formas, todo dejo de funcionar... pero el servicio anda, debe ser otro el problema.
 
