@@ -15,6 +15,6 @@ Por favor, ayudanos con esto que estamos ante un super problema en produccion y 
 
 
 En caso de que lo quieras ver en tu navegador:
-- [app1]({{TRAFFIC_HOST1_30000}})
-- [app2]({{TRAFFIC_HOST1_31000}})
+- [app1]({{TRAFFIC_HOST1_30000/mypath}})
+- [app2]({{TRAFFIC_HOST1_31000/mypath}})
 

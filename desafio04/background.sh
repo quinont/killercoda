@@ -113,7 +113,7 @@ spec:
         configMap:
           name: configuracion1
       containers:
-      - image: nginx
+      - image: nginx:1.23.1-alpine
         name: backend
         volumeMounts:
         - name: config
@@ -143,7 +143,7 @@ spec:
         configMap:
           name: configuracion2
       containers:
-      - image: nginx
+      - image: nginx:1.23.1-alpine
         name: backend
         volumeMounts:
         - name: config
