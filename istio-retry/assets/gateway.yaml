@@ -11,7 +11,7 @@ spec:
       name: http
       protocol: HTTP
     hosts:
-    - "app1.com"
+    - "*"
 ---
 apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
@@ -19,12 +19,12 @@ metadata:
   name: httpbin
 spec:
   hosts:
-  - "app1.com"
+  - "*"
   gateways:
   - ingress-gateway
   http:
   - route:
     - destination:
-        host: app1
+        host: bff
         port:
           number: 80
