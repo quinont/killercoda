@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: bff
+  name: bff
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: bff
+  template:
+    metadata:
+      labels:
+        app: bff
+        layer: bff
+    spec:
+      containers:
+      - image: quinont/repeater:1
+        name: bff
+        env:
+        - name: DOMINIO_APP
+          value: "backend1"
+        - name: PATH_APP
+          value: "/toapp"
+        - name: STATUS_CODE_APP
+          value: "200"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: bff
+  name: bff
+spec:
+  ports:
+  - port: 80
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    app: bff

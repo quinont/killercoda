@@ -1,0 +1,41 @@
+{
+  "title": "Retries en Istio",
+  "description": "En este escenario vamos a revisar como funcionan los retries en Istio.",
+  "details": {
+      "steps": [
+      {
+        "title": "Como son los retries en Istio",
+        "text": "step1/text.md"
+      },
+      {
+        "title": "Creando un ejemplo",
+        "text": "step2/text.md"
+      },
+      {
+        "title": "Modificando el ejemplo",
+        "text": "step3/text.md"
+      }
+    ],
+    "finish": {
+      "text": "finish/finish.md"
+    },
+    "intro": {
+      "text": "init/init.md",
+      "background": "init/background.sh",
+      "foreground": "init/foreground.sh"
+    },
+    "assets": {
+      "host01": [
+        {"file": "wait-background.sh", "target": "/ks", "chmod": "+x"},
+        {"file": "demo.yaml", "target": "/tmp", "chmod": "+x"},
+        {"file": "bff.yaml", "target": "/root/scenario"},
+        {"file": "backend1.yaml", "target": "/root/scenario"},
+        {"file": "app2.yaml", "target": "/root/scenario"},
+        {"file": "gateway.yaml", "target": "/root/expose"}
+      ]
+    }
+  },
+  "backend": {
+    "imageid": "kubernetes-kubeadm-2nodes"
+  }
+}
