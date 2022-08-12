@@ -1,0 +1,40 @@
+{
+  "title": "Introduccion a Resources en Kubernetes",
+  "description": "Como funcionan los recursos en Kubernetes.",
+  "details": {
+      "steps": [
+      {
+        "title": "Recursos CPU",
+        "text": "step1/text.md"
+      },
+      {
+        "title": "Recursos RAM",
+        "text": "step2/text.md"
+      },
+      {
+        "title": "example",
+        "text": "step3/text.md"
+      }
+    ],
+    "finish": {
+      "text": "finish/finish.md"
+    },
+    "intro": {
+      "text": "init/init.md",
+      "background": "init/background.sh",
+      "foreground": "init/foreground.sh"
+    },
+    "assets": {
+      "host01": [
+        {"file": "cpu_example01.yaml", "target": "/root/cpu/example01/"},
+        {"file": "cpu_example02.yaml", "target": "/root/cpu/example02/"},
+        {"file": "ram_example01.yaml", "target": "/root/ram/example01/"},
+        {"file": "ram_example02.yaml", "target": "/root/ram/example02/"},
+        {"file": "metric_server.yaml", "target": "/tmp/"}
+      ]
+    }
+  },
+  "backend": {
+    "imageid": "kubernetes-kubeadm-2nodes"
+  }
+}
