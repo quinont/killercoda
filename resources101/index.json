@@ -30,6 +30,7 @@
         {"file": "cpu_example02.yaml", "target": "/root/cpu/example02/"},
         {"file": "ram_example01.yaml", "target": "/root/ram/example01/"},
         {"file": "ram_example02.yaml", "target": "/root/ram/example02/"},
+        {"file": "wait-background.sh", "target": "/ks/"},
         {"file": "metric_server.yaml", "target": "/tmp/"}
       ]
     }
