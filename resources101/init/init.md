@@ -6,7 +6,6 @@ TODO:
 - Mejorar documentacion de que es lo que pasa. 
 -- Agregar mas imagenes.
 -- Mejorar el formato para resaltar ideas.
-- Agregar un step mas para mostrar como se puede modificar el comportamiento con los virtual services.
 
 Hola!,
 <br>
@@ -14,5 +13,15 @@ Primero que todo y antes que nada, vamos a instalar el ambiente... por favor esp
 
 <br>
 
-Nota: el esqueleto de todo esto lo saque de aqui: https://github.com/killercoda/scenarios-istio muchas gracias!
+En este tutorial vamos a estar revisando como trabaja kubernetes con los recursos (RAM y CPU). 
+Veremos que pasa cuando definimos un requests y un limite.
+Y que pasa cuando el container sobre-pasa el limite.
+
+Espero que se entienda, cualquier PR es bien recibido para mejorar todo esto.
+
+Gracias
+
+Saludos
+
+Esteban
 

@@ -15,3 +15,5 @@ kubectl apply -f /tmp/metric_server.yaml
 
 # mark init finished
 touch /ks/.initfinished
+
+apt install tree -y

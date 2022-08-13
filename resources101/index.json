@@ -4,16 +4,24 @@
   "details": {
       "steps": [
       {
-        "title": "Recursos CPU",
-        "text": "step1/text.md"
+        "title": "Recursos CPU - Antes del limite",
+        "text": "step1/text.md",
+        "foreground": "step1/foreground.sh"
       },
       {
-        "title": "Recursos RAM",
-        "text": "step2/text.md"
+        "title": "Recursos CPU - Pasando el limite",
+        "text": "step2/text.md",
+        "foreground": "step2/foreground.sh"
       },
       {
-        "title": "example",
-        "text": "step3/text.md"
+        "title": "Recursos RAM - Antes del limite",
+        "text": "step3/text.md",
+        "foreground": "step3/foreground.sh"
+      },
+      {
+        "title": "Recursos RAM - Pasando el limite",
+        "text": "step4/text.md",
+        "foreground": "step4/foreground.sh"
       }
     ],
     "finish": {

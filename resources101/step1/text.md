@@ -1,57 +1,60 @@
 
-# Retry en Istio
+# CPU
 
-La arquitectura propuesta para revisar este ejemplo consta de 3 microservicios, los cuales son:
-- bff:
-- backend1:
-- app2:
-
-La conexion entre las mismas esta dentalla en la siguiente imagen:
-
-![Scan results](../assets/istioretry-scenario.png)
-
-Primero es necesario crear el ambiente, para hacerlo todo mas facil vamos a ocupar el namespace default:
+Primero vamos a comenzar con el uso de CPU. Entonces, comencemos con el example01:
 
 ```plain
-kubectl label namespace default istio-injection=enabled --overwrite
+cd /root/resources/cpu/example01/
 ```{{exec}}
 
-Ahora es necesario deployar las aplicaciones:
+Aqui encontraremos el archivo de nuestro primer ejemplo, con un cat lo podremos imprimir por consola para verlo en mas detalle:
 ```plain
-kubectl apply -f scenario/
+cat cpu_example01.yaml
 ```{{exec}}
 
-Ahora es necesario exponer el servicio, y para ello vamos a hacer:
+En este caso vamos a ver que nuestro container cpu-demo-ctr tiene definido el siguiente recurso para cpu:
+```yaml
+    resources:
+      limits:
+        cpu: "1"
+      requests:
+        cpu: "0.5"
+```
+
+Entonces para este container estamos definiendo un limite de 1 core, y 0.5 (o 500m) de cpu como request.
+
+Por lo tanto, el container va a tener como limite 1 core mientras que lo que estamos por reservar en kubernetes va a ser de 500m de cpu en el nodo donde va a estar este pod.
+
+
+
+En la parte de args vemos la configuracion del container:
+```yaml
+    args:
+    - -cpus
+    - "1"
+```
+En otras palabras lo que estamos viendo aqui es que vamos a decirle al container que tome 1 CPU.
+
+
+
+## Deployemos nuestro POD
+
+Para deployar el pod debemos ejecutar lo siguiente:
 ```plain
-kubectl apply -f expose/
+kubectl apply -f cpu_example01.yaml
 ```{{exec}}
 
-En este momento ya tenemos todo el servicio arriba y funcionando :D.
-
-Para poder probar es necesario realizar un curl a localhost de la siguiente manera:
-
+Es necesario esperar unos 20 o 30 segundo para que nos aparezcan las metricas, asi que despues de unos segundo podemos ejecutar el siguiente comando para saber cuanto recursos esta consumiento el pod:
 ```plain
-curl http://localhost:30000/toapp; echo;
+kubectl top pod
 ```{{exec}}
 
-Puede ejecutar varias veces el comando anterior viendo cual es el output que tenemos.
-
-Si ejecutamos varias veces el comando, podemos ver los logs como cambian con el siguiente comando:
-
-Para el bff:
-```plain
-kubectl logs -l app=bff
-```{{exec}}
-
-Para el backend1:
-```plain
-kubectl logs -l app=backend1
-```{{exec}}
-
-Para el app2:
-```plain
-kubectl logs -l app=app2
-```{{exec}}
+Nota: los nodos donde corre este ejemplo solo tienen 1 core, por lo tanto el pod puede que no llegue a 1000m sino que quede al rededor de 850m aproximadamente.
 
 
-Ahora vamos a pasar al siguiente paso donde hacemos algo mas divertido... Agregamos 503 a las apps para probar los retries....
+## Conclusion
+
+Excelente!!, ya tenemos un pod consumiendo el limite de recursos que pusimos, en el proximo paso veremos que pasa si bajamos el limite y seguimos consumiendo 1 cpu.
+
+> Algo importante antes de pasar al proximo ejemplo, por favor note que cuando vemos el consumo del pod con `kubectl top pod`, pero los limits/requests estan a nivel de container. 
+> Tengamos en cuenta que un pod es un conjunto de containers, entonces los recursos se establecen por container, pero la metrica, en este caso, esta a nivel de pod.
