@@ -52,12 +52,19 @@ Bueno.... en verdad no continues esperando para tener las metricas, las mismas n
 kubectl get pod
 ```{{exec}}
 
-Vayamos a la conclusion....
+Entonces nuestro container se esta reiniciando todo el tiempo... Podemos ver un poco mejor la causa en el siguiente lugar:
+```plain
+kubectl get pod memory-demo -o yaml | yq e '.status.containerStatuses[0]' -
+```{{exec}}
+
+Lo importante aqui es el: `OOMKilled`
+
+Que significa esto? -> bueno, superamos el limite de ram y kubernetes reinicio el container. Continuemos hablando de esto en la conclusion...
 
 ## Conclusion
 
 ¿Que paso?? ¿¿por que mi pod se reinicia todo el tiempo?? ¿¿ que hice para merecer esto??
 
-Bueno, lo explicaremos de forma facil, cuando el container supera la RAM limite, kubernetes reinicia el container. Por lo tanto, en este caso particular el limite de RAM es 200Mi, pero el container esta solicitando 250Mi, asi que siempre que supera los 200Mi, kubernetes lo termina reiniciando.
+Bueno, lo explicaremos de forma facil, cuando el container supera la RAM limite, kubernetes reinicia el container (y pone como causa del reinicio el OOMKilled). Por lo tanto, en este caso particular el limite de RAM es 200Mi, pero el container esta solicitando 250Mi, asi que siempre que supera los 200Mi, kubernetes lo termina reiniciando.
 
 

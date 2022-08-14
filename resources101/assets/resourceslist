@@ -4,6 +4,6 @@ echo -e "Comenzando...\n"
 nodes=$(kubectl get node --no-headers -o custom-columns=NAME:.metadata.name)
 for node in $nodes; do
   echo "Nodo: $node"
-  kubectl describe node "$node" | sed '1,/(Total limits may be over 100 percent, i.e., overcommitted.)/d'
+  kubectl describe node "$node" | sed '1,/(Total limits may be over 100 percent, i.e., overcommitted.)/d' | head -n4
   echo
 done
