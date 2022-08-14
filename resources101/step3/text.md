@@ -1,77 +1,60 @@
 
-# Segundo escenario
+# RAM
 
-En este ultimo caso vamos a poner el error en la app2, y veremos que es lo que pasa.
+Terminando de ver la parte del uso de recursos para CPU, arrancamos con el uso de RAM. 
 
-El diagrama que tendremos es asi:
+Antes que nada, vamos a la carpeta donde estan nuestros archivos:
 
-![Scan results](../assets/istioretry-scenario1.png)
-
-Asi que primero lo que vamos a hacer es que el backend1 devuelva 200 siempre:
 ```plain
-kubectl set env deployment/backend1 STATUS_CODE_APP=200
+cd /root/resources/ram/example01/
 ```{{exec}}
 
-Ahora le decimos a la app2 que devuelva 503, en este caso tendremos:
+Aqui encontraremos el archivo del ejemplo, con un cat lo podremos imprimir por consola para verlo en mas detalle:
 ```plain
-kubectl set env deployment/app2 STATUS_CODE_APP=503
+cat ram_example01.yaml
 ```{{exec}}
 
-Por ultimo limpiamos el log del bff para poder trabajar sin ruido:
+En este caso vamos a ver que nuestro container memory-demo-ctr tiene definido el siguiente recurso para ram:
+```yaml
+    resources:
+      requests:
+        memory: "100Mi"
+      limits:
+        memory: "200Mi"
+```
+
+Entonces para este container estamos definiendo un limite de 200Mi y un request de 100Mi.
+
+> Importante: esto significa que vamos a estar reservando en el nodo 100Mi, y permitiremos al container que consuma hasta 200Mi.
+
+
+En la parte de args vemos la configuracion del container:
+```yaml
+    args: ["--vm", "1", "--vm-bytes", "150M", "--vm-hang", "1"]
+```
+De todos estos parametros el que mas nos importa es la parte de `--vm-bytes 150M`, en otras palabras, esto significa que nuestro container consumira 150M cuando se levante.
+
+## Antes de deployar el pod
+
+Como los casos anteriores, podemos revisar antes y despues cuandoto estamos consumiendo de recursos por nodo con el siguiente comando:
 ```plain
-kubectl rollout restart deployment bff
+resourceslist
 ```{{exec}}
 
-Esperamos hasta que todos los pods esten en estado Running.
+## Deployemos nuestro pod
+
+Para deployar el pod debemos ejecutar lo siguiente:
 ```plain
-kubectl get pod
+kubectl apply -f ram_example01.yaml
 ```{{exec}}
 
-Entonces ahora si probamos una llamada a nuestro endpoint tendremos:
+Es necesario esperar unos 20 o 30 segundo para que nos aparezcan las metricas, asi que despues de unos segundo podemos ejecutar el siguiente comando para saber cuanto recursos esta consumiento el pod:
 ```plain
-curl http://localhost:30000/toapp; echo;
+kubectl top pod
 ```{{exec}}
 
-## Miremos los logs
 
-Para ver los logs hacemos:
-Para el bff:
-```plain
-kubectl logs -l app=bff
-```{{exec}}
+## Conclusion
 
-Para el backend1:
-```plain
-kubectl logs -l app=backend1
-```{{exec}}
-
-Para el app2:
-```plain
-kubectl logs -l app=app2
-```{{exec}}
-
-## Que es lo que se ve?
-
-Lo que vemos es que:
-- log de bff: Solo hay una llamada.
-- log de backend1: Solo hay una llamada.
-- log de app2: Tiene 3 llamadas a diferentes pods.
-
-## Que paso?
-
-Paso exactamente lo mismo que en el caso anterior, el envoy del backend1 detecto que habia un problema con la conexion con la app2 (dado a que recibio 503), por lo tanto, fue marcando cada uno de los pod que le devolvieron un error y realizo 3 llamadas totales (1 es la original mas 2 retries)
-
-## Que otro escenario existe?
-
-Con estas pruebas usted puede realizar los siguientes escenarios:
-- que solo el bff devuelva error.
-- que tanto el backend1 como la app2 devuelvan errores.
-- Que todos los artefactos devuelvan errores.
-
-
-## Que nos queda a continuacion?
-
-probar las configuraciones de virtual service para modificar el comportamiento de istio retries.
-
-
+Excelente!!, Tenemos un pod que posee un container y este container esta consumiendo 150Mi, eso quiere decir que el consumo esta en el medio del requests (100Mi) y el limite (200Mi). Veremos en el siguiente paso que pasa cuando superamos el limite... 
 

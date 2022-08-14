@@ -34,8 +34,16 @@ De todas formas en los args vamos a mantener el parametro de cpus en 1:
 En otras palabras, vamos a tener el mismo consumo de CPU, pero ahora el limite (y el requests) es de 500m veremos que pasa :O
 
 
+## Revisar los recursos asignado por nodo
 
-## Deployemos nuestro POD
+En caso de querer saber cuantos recursos estamos ocupando podriamos volver a ejecutar el siguiente comando antes y despues:
+```plain
+resourceslist
+```{{exec}}
+
+
+
+## Deployemos nuestro pod
 
 Para deployar el pod debemos ejecutar lo siguiente:
 ```plain

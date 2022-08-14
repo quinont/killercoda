@@ -35,9 +35,21 @@ En la parte de args vemos la configuracion del container:
 ```
 En otras palabras lo que estamos viendo aqui es que vamos a decirle al container que tome 1 CPU.
 
+## Antes de deployar el pod
+
+Antes de deployar el pod veremos cuales son los recursos disponibles en el nodo con el siguiente comando:
+```plain
+resourceslist
+```{{exec}}
+
+El resultado sera cuantos recursos tenemos en nuestro nodo.
+
+El porcentaje que muestra alado del numero es cuanto representa este uso del nodo en si. En otras palabras si vemos que dice en CPU: 425m es el 42 % del nodo dado a nuestro nodo tiene 1 CPU. 
+
+> NOTA: el requests nunca superar el 100 %, en cambio el limite si puede superarlo.
 
 
-## Deployemos nuestro POD
+## Deployemos nuestro pod
 
 Para deployar el pod debemos ejecutar lo siguiente:
 ```plain
@@ -49,7 +61,15 @@ Es necesario esperar unos 20 o 30 segundo para que nos aparezcan las metricas, a
 kubectl top pod
 ```{{exec}}
 
-Nota: los nodos donde corre este ejemplo solo tienen 1 core, por lo tanto el pod puede que no llegue a 1000m sino que quede al rededor de 850m aproximadamente.
+> Nota: los nodos donde corre este ejemplo solo tienen 1 core, por lo tanto el pod puede que no llegue a 1000m sino que quede al rededor de 850m aproximadamente.
+
+## Despues del deploy
+
+Ahora podriamos ver como crecio el request de uso de CPU del nodo, entonces volvemos a ejecutar:
+```plain
+resourceslist
+```{{exec}}
+
 
 
 ## Conclusion

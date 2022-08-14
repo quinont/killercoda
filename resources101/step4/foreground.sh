@@ -1,6 +1,6 @@
 # Borremos el pod que usamos en el anterior ejemplo
 
-kubectl delete pod cpu-demo
+kubectl delete pod memory-demo-ctr
 
-# Ahora continuemos con el ejemplo 2 del CPU, a trabajar!
+# Ahora continuemos con el ejemplo 2 de RAM, a trabajar!
 

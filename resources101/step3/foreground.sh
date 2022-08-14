@@ -2,5 +2,5 @@
 
 kubectl delete pod cpu-demo
 
-# Ahora continuemos con el ejemplo 2 del CPU, a trabajar!
+# Ahora continuemos con el ejemplo 1 de RAM, a trabajar!
 

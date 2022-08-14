@@ -1,45 +1,45 @@
 
-# CPU superando el limite
+# RAM superando el limite
 
-Perfecto ahora vamos a continuar con el segundo ejemplo, primero vayamos a la carpeta:
+Ahora vamos superar el limite, para esto vamos a ir a la carpeta donde esta el ejemplo:
 
 ```plain
-cd /root/resources/cpu/example02/
+cd /root/resources/ram/example02/
 ```{{exec}}
 
-Ahora veremos que vamos a hacer, asi que hacemos un cat al manifests:
+Mostramos el manifests para ver que es lo que estamos por hacer:
 ```plain
-cat cpu_example02.yaml
+cat ram_example02.yaml
 ```{{exec}}
 
-En este caso vamos a ver que nuestro container cpu-demo-ctr tiene definido el siguiente recurso para cpu:
+Los resources del container estan definidos igual que en el ejemplo anterior:
 ```yaml
     resources:
-      limits:
-        cpu: "0.5"
       requests:
-        cpu: "0.5"
+        memory: "100Mi"
+      limits:
+        memory: "200Mi"
 ```
 
-Entonces, el container tiene el mismo requests que limite, (o sea 0.5 o 500m de CPU).
-
-
-De todas formas en los args vamos a mantener el parametro de cpus en 1:
+En la parte de los args vemos algo distinto:
 ```yaml
-    args:
-    - -cpus
-    - "1"
+    args: ["--vm", "1", "--vm-bytes", "250M", "--vm-hang", "1"]
 ```
+En otras palabras lo que tenemos aqui es que este container va a ocupar 250Mi de ram, superando al limite.
 
-En otras palabras, vamos a tener el mismo consumo de CPU, pero ahora el limite (y el requests) es de 500m veremos que pasa :O
+## Antes de deployar el pod
+
+Como siempre, podemos ver como cambian los recursos disponibles de los nodos antes y despues de cambiar los limites:
+```plain
+resourceslist
+```{{exec}}
 
 
-
-## Deployemos nuestro POD
+## Deployemos nuestro pod
 
 Para deployar el pod debemos ejecutar lo siguiente:
 ```plain
-kubectl apply -f cpu_example02.yaml
+kubectl apply -f ram_example02.yaml
 ```{{exec}}
 
 Es necesario esperar unos 20 o 30 segundo para que nos aparezcan las metricas, asi que despues de unos segundo podemos ejecutar el siguiente comando para saber cuanto recursos esta consumiento el pod:
@@ -47,10 +47,17 @@ Es necesario esperar unos 20 o 30 segundo para que nos aparezcan las metricas, a
 kubectl top pod
 ```{{exec}}
 
+Bueno.... en verdad no continues esperando para tener las metricas, las mismas nunca van a aparecer. Lo mejor seria que veas el estado de los restart del pod subieron mucho:
+```plain
+kubectl get pod
+```{{exec}}
+
+Vayamos a la conclusion....
 
 ## Conclusion
 
-¿Que paso?? -> por mas que nuestro container este pidiendo 1 CPU, kubernetes (con el limite que establecimos nosotros) solo llega a los 500m.
+¿Que paso?? ¿¿por que mi pod se reinicia todo el tiempo?? ¿¿ que hice para merecer esto??
 
-Excelente!! ya vimos como se comporta el limite en CPU. Ahora queda ver como funciona con respecto a la RAM, Asi que vamos al siguiente step!.
+Bueno, lo explicaremos de forma facil, cuando el container supera la RAM limite, kubernetes reinicia el container. Por lo tanto, en este caso particular el limite de RAM es 200Mi, pero el container esta solicitando 250Mi, asi que siempre que supera los 200Mi, kubernetes lo termina reiniciando.
+
 
