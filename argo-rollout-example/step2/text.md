@@ -6,6 +6,15 @@ Como primer paso es necesario bajar el codigo de la app de https://github.com/qu
 git clone https://github.com/quinont/argo-rollout-example.git
 ```{{exec}}
 
+Creamos los namespaces y los configuramos para que los pods esten dentro del mesh:
+
+```plain
+kubectl create namespace messenger
+kubectl create namespace frontend
+kubectl label namespace messenger istio-injection=enabled
+kubectl label namespace frontend istio-injection=enabled
+```{{exec}}
+
 Ahora vamos a deployar el backend messenger:
 
 ```plain
@@ -47,7 +56,7 @@ Para poder hacer las pruebas vamos a generar trafico a nuestras apps.
 Para esto es neceario crear una nueva terminal y ejecutar lo siguiente:
 ```plain
 export ingress_port=$(kubectl get svc -n istio-system -ojsonpath='{.spec.ports[?(@.name=="http2")].nodePort}' istio-ingressgateway)
-while true; do echo -n `date +"[%m-%d %H:%M:%S]"`; curl -s localhost:${ingress_port}/ | grep "El mensaje es:" ; sleep 1; done
+while true; do echo -n $(date +"[%m-%d %H:%M:%S]"); curl -s localhost:${ingress_port}/ | grep "El mensaje es:" ; sleep 1; done
 ```{{exec}}
 
 

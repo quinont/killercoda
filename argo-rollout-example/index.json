@@ -17,11 +17,11 @@
       },
       {
         "title": "Nueva Version con errores de disponibilidad",
-        "text": "step3/text.md"
+        "text": "step4/text.md"
       },
       {
         "title": "Nueva version con fallo en latency",
-        "text": "step3/text.md"
+        "text": "step5/text.md"
       }
     ],
     "finish": {
