@@ -1,6 +1,6 @@
 {
   "title": "Ejemplo de Argo Rollout",
-  "description": "Un ejemplo completo de Argo rollout con un despliegue canary (utilizando Istio y Prometheus)",
+  "description": "Un ejemplo completo de Argo rollout con un canary deploy (utilizando Istio y Prometheus)",
   "details": {
       "steps": [
       {
