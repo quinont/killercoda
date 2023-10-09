@@ -1,0 +1,45 @@
+{
+  "title": "Ejemplo de Argo Rollout",
+  "description": "Un ejemplo completo de Argo rollout con un despliegue canary (utilizando Istio y Prometheus)",
+  "details": {
+      "steps": [
+      {
+        "title": "Como es la Arquitectura",
+        "text": "step1/text.md"
+      },
+      {
+        "title": "Deployando aretefacto",
+        "text": "step2/text.md"
+      },
+      {
+        "title": "Nueva Version",
+        "text": "step3/text.md"
+      },
+      {
+        "title": "Nueva Version con errores de disponibilidad",
+        "text": "step3/text.md"
+      },
+      {
+        "title": "Nueva version con fallo en latency",
+        "text": "step3/text.md"
+      }
+    ],
+    "finish": {
+      "text": "finish/finish.md"
+    },
+    "intro": {
+      "text": "init/init.md",
+      "background": "init/background.sh",
+      "foreground": "init/foreground.sh"
+    },
+    "assets": {
+      "host01": [
+        {"file": "wait-background.sh", "target": "/ks", "chmod": "+x"},
+        {"file": "demo.yaml", "target": "/tmp", "chmod": "+x"}
+      ]
+    }
+  },
+  "backend": {
+    "imageid": "kubernetes-kubeadm-2nodes"
+  }
+}
