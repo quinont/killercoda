@@ -22,4 +22,4 @@ El deploy con canary va a tener 2 controles:
 - Latency
 - Disponibilidad
 
-Cuando termine de cargar el ambiente, haga clic en "Next"
+Cuando termine de cargar el ambiente, haga clic en "START"

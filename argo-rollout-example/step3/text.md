@@ -1,6 +1,6 @@
 # Pasando a la nueva version
 
-IMPORTANTE: es importante dejar corriendo el script que llama a la app mientras se ejecuta todos estos comandos en la primera terminal.
+**IMPORTANTE**: es importante dejar corriendo el script que llama a la app mientras se ejecuta todos estos comandos en la primera terminal.
 En caso contrario podemos llegar a tener un error como este:
 ```
 RolloutAborted: Rollout aborted update to revision 2: Metric "success-rate" assessed Error due to consecutiveErrors (5) > consecutiveErrorLimit (4): "Error Message: reflect: slice index out of range"
@@ -26,7 +26,7 @@ Si vamos a la tab 2, podremos ver que cada tanto aparecen mensajes que estamos e
 
 ## Pero... que esta pasando???
 
-Lo que esta pasando en este momento es que se va a ir migrando el trafico desde la version nueva a la version vieja, esta configuracion se encuentra en el [archivo del rollout de messenger|https://github.com/quinont/argo-rollout-example/blob/main/manifests/messenger/01-rollout.yaml] en la siguiente parte:
+Lo que esta pasando en este momento es que se va a ir migrando el trafico desde la version nueva a la version vieja, esta configuracion se encuentra en el [archivo del rollout de messenger](https://github.com/quinont/argo-rollout-example/blob/main/manifests/messenger/01-rollout.yaml) en la siguiente parte:
 
 ```yaml
   strategy:
@@ -59,7 +59,7 @@ Lo que esta pasando en este momento es que se va a ir migrando el trafico desde 
 
 Eso significa que pondra un peso de 10 al virtualservice de istio, y va a esperar 3 minutos. Despues aumenta a 30 y espera 2 min, despues 50 y espera 2 min mas, y para terminar deja en el 80% del trafico y espera los ultimos 2 minutos.
 
-A partir del paso 2, comienza a ejecutar el [analysis|https://github.com/quinont/argo-rollout-example/blob/main/manifests/messenger/03-analysistemplate.yaml] el cual es el siguiente:
+A partir del paso 2, comienza a ejecutar el [analysis](https://github.com/quinont/argo-rollout-example/blob/main/manifests/messenger/03-analysistemplate.yaml) el cual es el siguiente:
 
 ```yaml
 spec:

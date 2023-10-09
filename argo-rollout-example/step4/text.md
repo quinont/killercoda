@@ -27,6 +27,8 @@ Antes que nada, vamos al tab 3, en caso de estar ejecutandose, paramos la ejecuc
 kubectl port-forward -n istio-system svc/grafana --address 0.0.0.0 20001:3000
 ```{{exec}}
 
+Esto expone el puerto de grafana a internet y podremos entrar desde el browser haciendo [hacer clic aca]({{TRAFFIC_HOST1_20001}})
+
 De alli nos vamos al explorer, y podemos ejecutar las querys:
 
 Disponibilidad:

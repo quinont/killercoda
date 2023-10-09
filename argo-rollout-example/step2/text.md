@@ -53,6 +53,8 @@ O tambien podemos [hacer clic aca]({{TRAFFIC_HOST1_30000}})
 
 Para poder hacer las pruebas vamos a generar trafico a nuestras apps.
 
+**IMPORTANTE**: Es necesario crear un nuevo tab para poder realizar trafico sin necesidad de que tengamos la terminal bloqueda.
+
 Para esto es neceario crear una nueva terminal y ejecutar lo siguiente:
 ```plain
 export ingress_port=$(kubectl get svc -n istio-system -ojsonpath='{.spec.ports[?(@.name=="http2")].nodePort}' istio-ingressgateway)
