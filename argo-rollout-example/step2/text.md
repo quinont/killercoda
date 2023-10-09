@@ -1,81 +1,55 @@
+# Deploy del artefacto
 
-# Primera prueba
-
-Ahora vamos a generar un error en el componente backend1, el mismo va a realizar una conexion hacia la app2, pero a su vez va a devolver al bff un error 503.
-
-El siguiente es el diagrama de lo que estamos por revisar:
-
-![Scan results](../assets/istioretry-scenario1.png)
-
-Primero vamos a modificar el backend1 para que de el error:
+Como primer paso es necesario bajar el codigo de la app de https://github.com/quinont/argo-rollout-example
 
 ```plain
-kubectl set env deployment/backend1 STATUS_CODE_APP=503
+git clone https://github.com/quinont/argo-rollout-example.git
 ```{{exec}}
 
-Ahora limpiemos un poco los logs de las apps y reiniciemos todos los pods de los deployments
-```plain
-kubectl rollout restart deployment app2
-```{{exec}}
+Ahora vamos a deployar el backend messenger:
 
 ```plain
-kubectl rollout restart deployment bff
+cd argo-rollout-example/manifests/messenger/
+kubectl apply -f .
 ```{{exec}}
 
-Esperamos hasta que todos los pods esten en estado Running.
+Ahora a deployar el frontend:
+
 ```plain
-kubectl get pod
+cd ../frontend/
+kubectl apply -f .
 ```{{exec}}
 
-Entonces si ahora probamos una llamada a nuestro endpoint tendremos:
+Ahora revisamos como esta funcionando todo:
 ```plain
-curl http://localhost:30000/toapp; echo;
+kubectl get pod -n messenger
 ```{{exec}}
 
-## Que paso???
-
-Veamos los logs de las apps...
-Para el bff:
 ```plain
-kubectl logs -l app=bff
+kubectl get pod -n frontend
 ```{{exec}}
 
-Para el backend1:
+# Probando la aplicacion
+
+Podemos porbar la app pegandole con un curl:
 ```plain
-kubectl logs -l app=backend1
+export ingress_port=$(kubectl get svc -n istio-system -ojsonpath='{.spec.ports[?(@.name=="http2")].nodePort}' istio-ingressgateway)
+curl -s localhost:${ingress_port}/ 
 ```{{exec}}
 
-Para el app2:
+O tambien podemos [hacer clic aca]({{TRAFFIC_HOST1_30000}})
+
+
+# Inyectando trafico
+
+Para poder hacer las pruebas vamos a generar trafico a nuestras apps.
+
+Para esto es neceario crear una nueva terminal y ejecutar lo siguiente:
 ```plain
-kubectl logs -l app=app2
+export ingress_port=$(kubectl get svc -n istio-system -ojsonpath='{.spec.ports[?(@.name=="http2")].nodePort}' istio-ingressgateway)
+while true; do echo -n `date +"[%m-%d %H:%M:%S]"`; curl -s localhost:${ingress_port}/ | grep "El mensaje es:" ; sleep 1; done
 ```{{exec}}
 
-Lo que vamos a ver es lo siguiente:
-- log de bff: solo una llamada, y este devuelve un 200.
-- log de backend1: vamos a ver 3 llamadas, una en cada pod.
-- log del app2: vamos a ver 3 llamadas tambien, pero no necesariamente va a ser una para cada pod.
 
-## Explicacion
+A partir de este punto ya estamos todo armado, ahora a comenzar a actualizar la app en el siguiente step...
 
-Entonces que paso?, lo que paso fue basicamente lo siguiente:
-- desde el curl llamamos al bff.
-- El bff llama a backend1.
-- el backend1 llama a la app2.
-- La app2 devuelve un 200 con el mensaje correspondiente.
-- El backend1 devuelve un error 503 al bff. 
-- En este momento comienza el sistema de retries de istio. Entonces el envoy proxy, marca al pod (del backend1) que devolvio el 503 como un pod conflictivo para no enviar mas solicitudes, y toma otro pod mas como destino (del backend1), para hacer su prueba. Asi que reintenta la solicitud una vez mas.
-- La solicitud va al backend1.
-- El backend1 envia la solicitud al app2.
-- El app2 responde al backend1. 
-- El backend1 responde un 503 al bff.
-- En este momento el envoy vuelve a detectar otro error, y como el sistema por defecto de retries dice que son 2 veces, vuelve a hacer una prueba mas al backend1, esta vez la solicitud va al ultimo pod (si tuvieramos mas pod, el algoritmo tomaria un nuevo pod de la lista de los disponibles, pero si solo tendriamos dos, volveria al primero).
-- Esto se repite de la misma manera que lo anterior.
-
-## Entonces?
-
-En el log del backend1 vemos 3 solicitudes que estan en 3 pod distintos, dado a que las politicas del retries en Istio dice que no se envie la solicitud al pod con problema.
-Pero si vemos el log de la app2, no siempre va a estar distribuida la carga, dado a que, a esta app le llegaron tambien 3 solicitudes (pero esta siempre devolvio 200).
-De todas formas el bff solo recibio una unica solicitud.
-
-
-El proximo escenario vamos a correr el bug pero a la app2. Veremos que es lo que pasa.

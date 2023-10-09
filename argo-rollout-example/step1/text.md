@@ -1,57 +1,46 @@
 
-# Retry en Istio
+# Argo Rollout
 
-La arquitectura propuesta para revisar este ejemplo consta de 3 microservicios, los cuales son:
-- bff:
-- backend1:
-- app2:
+Argo rollout es una herramineta que te ayuda a gestionar y controlar como se despliegan las nuevas versiones de tus aplicaciones.
 
-La conexion entre las mismas esta dentalla en la siguiente imagen:
+Rollout en comparacion con el Deployment nativo de kubernetes, agrega 2 formas mas de despliegues para poder realizar las actualizaciones de formas mas controladas.
 
-![Scan results](../assets/istioretry-scenario.png)
+Las formas de despliegue con Argo rollout son:
+- Blue-green
+- Canary
 
-Primero es necesario crear el ambiente, para hacerlo todo mas facil vamos a ocupar el namespace default:
+Una de las principales caracteristicas que contiene Argo rollout son los "Analysis", estos procesos se ejecutan en los momentos de despliegue en donde podemos revisar si la nueva version funciona bien o tiene algun problema.
 
-```plain
-kubectl label namespace default istio-injection=enabled --overwrite
-```{{exec}}
+En este caso particular vamos a estar trabajando con Canary y analysis de demoras de respuestas y disponibilidad de las apps.
 
-Ahora es necesario deployar las aplicaciones:
-```plain
-kubectl apply -f scenario/
-```{{exec}}
+# Istio
 
-Ahora es necesario exponer el servicio, y para ello vamos a hacer:
-```plain
-kubectl apply -f expose/
-```{{exec}}
+Se va a ocupar istio como services mesh. Los services mesh proveen 3 principales cualidades:
 
-En este momento ya tenemos todo el servicio arriba y funcionando :D.
+- Monitoreo.
+- Manejo de solicitudes.
+- Seguridad.
 
-Para poder probar es necesario realizar un curl a localhost de la siguiente manera:
+Para este ejemplo, istio nos va a ayudar en los 2 primeros.
 
-```plain
-curl http://localhost:30000/toapp; echo;
-```{{exec}}
+- Dando monitoreo para poder ejecutar los analysis con las metricas de cantidad de solicitudes y tiempos de demoras de las ejecuciones. Y lo mejor de todo, sin necesidad de modificar el codigo de la app.
+- Dando el manejo de solicitudes a la version de canary.
 
-Puede ejecutar varias veces el comando anterior viendo cual es el output que tenemos.
+# Otras tools instaladas
 
-Si ejecutamos varias veces el comando, podemos ver los logs como cambian con el siguiente comando:
+Aparte de istio y Argo rollout, se instalaron otras herramientas:
 
-Para el bff:
-```plain
-kubectl logs -l app=bff
-```{{exec}}
-
-Para el backend1:
-```plain
-kubectl logs -l app=backend1
-```{{exec}}
-
-Para el app2:
-```plain
-kubectl logs -l app=app2
-```{{exec}}
+- Promethues: para guardar las metricas que se obtienen desde istio.
+- Grafana: Para visualizar las metricas.
+- Kiali: Para visualizar el mesh de istio.
+- Jaeger: Monitoreo de las trazas, vamos a revisar esto en el ejemplo de kiali.
 
 
-Ahora vamos a pasar al siguiente paso donde hacemos algo mas divertido... Agregamos 503 a las apps para probar los retries....
+# La aplicacion
+
+En este caso la aplicacion esta formada por 2 partes:
+- Messenger: Una app que devuelve un mensaje. Tiene 2 variables de entorno que sirven para modificar la demora en las respuesta y otra para modificar la probabilidad de errores 500.
+- Frontend: Una app que se conecta con messenger y devuelve su mensaje.
+
+
+A continuacion comenzaremos con el deploy de las apps...

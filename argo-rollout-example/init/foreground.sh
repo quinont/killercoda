@@ -20,3 +20,4 @@ kubectl apply -f /root/istio-${ISTIO_VERSION}/samples/addons/kiali.yaml
 kubectl apply -f /root/istio-${ISTIO_VERSION}/samples/addons/jaeger.yaml
 kubectl apply -f /root/istio-${ISTIO_VERSION}/samples/addons/grafana.yaml
 
+echo "Termino la instalacion, a comenzar con la practica...."
