@@ -34,17 +34,17 @@ De alli nos vamos al explorer, y podemos ejecutar las querys:
 Disponibilidad:
 ```
 sum(irate(
-  istio_requests_total{  
-    reporter="source",
-    destination_service=~"messenger-canary.messenger.svc.cluster.local",
-    response_code=~"2.*"
-  }[2m]
-)) / sum(irate(
   istio_requests_total{
     reporter="source",
-    destination_service=~"messenger-canary.messenger.svc.cluster.local"
+    destination_service=~"messenger-canary.messenger.svc.cluster.local|messenger.messenger.svc.cluster.local",
+    response_code=~"2.*"
   }[2m]
-))
+)) by (destination_service) / sum(irate(
+  istio_requests_total{
+    reporter="source",
+    destination_service=~"messenger-canary.messenger.svc.cluster.local|messenger.messenger.svc.cluster.local"
+  }[2m]
+)) by (destination_service)
 ```{{copy}}
 
 Tiempo de respuesta:
@@ -52,14 +52,14 @@ Tiempo de respuesta:
 sum(irate(
   istio_request_duration_milliseconds_sum{
     reporter="source",
-    destination_service=~"messenger-canary.messenger.svc.cluster.local"
+    destination_service=~"messenger-canary.messenger.svc.cluster.local|messenger.messenger.svc.cluster.local"
   }[2m]
-)) / sum(irate(
+)) by (destination_service) / sum(irate(
   istio_request_duration_milliseconds_count{
     reporter="source",
-    destination_service=~"messenger-canary.messenger.svc.cluster.local"
+    destination_service=~"messenger-canary.messenger.svc.cluster.local|messenger.messenger.svc.cluster.local"
   }[2m]
-))
+)) by (destination_service)
 ```{{copy}}
 
 
